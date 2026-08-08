@@ -1,0 +1,8 @@
+pefile
+pandas
+pyarrow
+numpy
+scikit-learn
+lightgbm
+pyyaml
+tqdm
