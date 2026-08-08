@@ -173,7 +173,7 @@ def main():
 
             print(f"    -> {status}")
 
-            if status in ("downloaded", "exists"):
+            if status in ("downloaded"):
                 downloaded += 1
 
             # Don't hammer the API.

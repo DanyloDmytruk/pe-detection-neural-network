@@ -110,6 +110,7 @@ def extract_pe_features(path: Path) -> dict:
         "path": str(path),
         "file_size": path.stat().st_size,
         "sha256": sha256_file(path),
+        "valid_pe": False,
     }
 
     try:
@@ -127,6 +128,8 @@ def extract_pe_features(path: Path) -> dict:
 
         features.update(extract_section_features(pe))
         features.update(extract_import_features(pe))
+
+        features["valid_pe"] = True
 
         pe.close()
 
