@@ -171,6 +171,9 @@ def main():
 
     cm = confusion_matrix(y_test, y_pred)
 
+    print("\nConfusion Matrix:")
+    print(cm)
+
     display = ConfusionMatrixDisplay(
         confusion_matrix=cm,
         display_labels=["Benign", "Malware"],
