@@ -14,6 +14,141 @@ SAMPLES_DIR = Path("data/samples")
 OUTPUT_FILE = Path("data/processed/features.parquet")
 
 
+API_CATEGORIES = {
+    "file_operations": {
+        "CreateFile",
+        "CreateFileA",
+        "CreateFileW",
+        "ReadFile",
+        "WriteFile",
+        "DeleteFile",
+        "CopyFile",
+        "CopyFileA",
+        "CopyFileW",
+        "MoveFile",
+        "MoveFileA",
+        "MoveFileW",
+    },
+
+    "registry_operations": {
+        "RegOpenKey",
+        "RegOpenKeyA",
+        "RegOpenKeyW",
+        "RegCreateKey",
+        "RegCreateKeyA",
+        "RegCreateKeyW",
+        "RegSetValue",
+        "RegSetValueA",
+        "RegSetValueW",
+        "RegQueryValue",
+        "RegQueryValueA",
+        "RegQueryValueW",
+        "RegDeleteKey",
+        "RegDeleteValue",
+    },
+
+    "network_operations": {
+        "socket",
+        "connect",
+        "send",
+        "recv",
+        "WSAStartup",
+        "InternetOpen",
+        "InternetOpenA",
+        "InternetOpenW",
+        "InternetConnect",
+        "InternetConnectA",
+        "InternetConnectW",
+        "HttpOpenRequest",
+        "HttpOpenRequestA",
+        "HttpOpenRequestW",
+        "HttpSendRequest",
+        "HttpSendRequestA",
+        "HttpSendRequestW",
+        "URLDownloadToFile",
+        "URLDownloadToFileA",
+        "URLDownloadToFileW",
+    },
+
+    "process_operations": {
+        "CreateProcess",
+        "CreateProcessA",
+        "CreateProcessW",
+        "OpenProcess",
+        "TerminateProcess",
+        "GetCurrentProcess",
+        "GetCurrentProcessId",
+        "CreateThread",
+        "ExitProcess",
+    },
+
+    "memory_operations": {
+        "VirtualAlloc",
+        "VirtualAllocEx",
+        "VirtualProtect",
+        "VirtualProtectEx",
+        "VirtualFree",
+        "ReadProcessMemory",
+        "WriteProcessMemory",
+        "MapViewOfFile",
+        "UnmapViewOfFile",
+    },
+
+    "crypto_operations": {
+        "CryptAcquireContext",
+        "CryptCreateHash",
+        "CryptHashData",
+        "CryptEncrypt",
+        "CryptDecrypt",
+        "CryptGenKey",
+        "BCryptEncrypt",
+        "BCryptDecrypt",
+        "BCryptGenRandom",
+    },
+
+    "service_operations": {
+        "OpenSCManager",
+        "OpenService",
+        "CreateService",
+        "StartService",
+        "ControlService",
+        "DeleteService",
+    },
+}
+
+def extract_api_category_features(pe):
+    features = {
+        category: 0
+        for category in API_CATEGORIES
+    }
+
+    total_imports = 0
+
+    if not hasattr(pe, "DIRECTORY_ENTRY_IMPORT"):
+        return features
+
+    for dll in pe.DIRECTORY_ENTRY_IMPORT:
+        for imported in dll.imports:
+
+            if imported.name is None:
+                continue
+
+            try:
+                api_name = imported.name.decode(
+                    "utf-8",
+                    errors="ignore",
+                )
+            except Exception:
+                continue
+
+            total_imports += 1
+
+            for category, api_names in API_CATEGORIES.items():
+                if api_name in api_names:
+                    features[category] += 1
+
+    return features
+
 def sha256_file(path: Path) -> str:
     sha256 = hashlib.sha256()
 
@@ -178,6 +313,7 @@ def extract_pe_features(path: Path) -> dict:
 
         features.update(extract_section_features(pe))
         features.update(extract_import_features(pe))
+        features.update(extract_api_category_features(pe))
 
         features["valid_pe"] = True
 
