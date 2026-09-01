@@ -1,3 +1,5 @@
 .venv/
 data/samples/benign/
 data/samples/malware/
+data/external_test/benign/
+data/external_test/malware/

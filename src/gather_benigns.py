@@ -8,18 +8,18 @@ import requests
 
 API_URL = (
     "https://api.github.com/repos/"
-    "iosifache/DikeDataset/contents/files/benign"
+    "iosifache/DikeDataset/contents/files/malware"
 )
 
 RAW_URL = (
     "https://raw.githubusercontent.com/"
-    "iosifache/DikeDataset/main/files/benign"
+    "iosifache/DikeDataset/main/files/malware"
 )
 
-OUTPUT_DIR = Path("data/samples/benign")
+OUTPUT_DIR = Path("data/external_test/malware")
 
-TOTAL_SAMPLES = 500
-CHUNK_SIZE = 10
+TOTAL_SAMPLES = 820
+CHUNK_SIZE = 20
 
 os.makedirs(OUTPUT_DIR, exist_ok=True)
 

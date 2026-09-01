@@ -1,0 +1,30 @@
+EXTERNAL TEST RESULTS
+==================================================
+
+Samples: 716
+
+Accuracy:  0.9763
+Precision: 0.9648
+Recall:    0.9889
+F1:        0.9767
+ROC-AUC:   0.9970
+
+Classification report:
+              precision    recall  f1-score   support
+
+           0     0.9885    0.9635    0.9758       356
+           1     0.9648    0.9889    0.9767       360
+
+    accuracy                         0.9763       716
+   macro avg     0.9766    0.9762    0.9762       716
+weighted avg     0.9766    0.9763    0.9763       716
+
+Confusion Matrix:
+[[343  13]
+ [  4 356]]
+
+Confusion Matrix interpretation:
+True Negative  (TN): 343
+False Positive (FP): 13
+False Negative (FN): 4
+True Positive  (TP): 356
